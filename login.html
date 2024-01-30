@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+    <style>
+    *   {
+            margin: 0;
+            padding: 0;
+            font-family: 'poppins', sans-serif;
+        }
+        section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            width: 100%;
+            background: url('gidd.gif') no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+        .form-box{
+            position: relative;
+            width: 400px;
+            height: 450px;
+            background: transparent;
+            border: 2px solid rgba(255, 59, 196, 0.5);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        h2{
+            font-size: 2em;
+            color: #81386f;
+            text-align: center;
+        }
+        .inputbox{
+            position: relative;
+            margin: 30px 0;;
+            width: 310px;
+            border-bottom: 2px solid #4d0039;
+        }
+        .inputbox label{
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            color: #530640;
+            font-size: 1em;
+            pointer-events: none;
+            transition: .5s;
+        }
+        input:focus ~ label,
+        input:valid ~ label{
+            top: -5px;
+        }
+        .inputbox input{
+            width: 100%;
+            height: 50px;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1.2em;
+            top: 20px;
+        }
+        .forget{
+            margin: -15px 0 10px;
+            font-size: .9em;
+            color: #000000;
+            display: flex;
+            justify-content: space-between;
+        }
+        .forget label input{
+            margin-right: 3px;
+        }
+        .forget label a:hover{
+            text-decoration: underline;
+        }
+        button{
+            width: 100%;
+            height: 40px;
+            border-radius: 40px;
+            background: #4b113c;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        .register{
+            font-size: .9em;
+            color: #4b113c;
+            text-align: center;
+            margin: 25px 0 10px;
+        }
+        .register p a{
+            text-decoration: none;
+            color: #4b113c;
+            font-weight: 600;
+        }
+        .register p a:hover{
+            text-decoration: underline;
+        }
+        .inputbox input {
+            width: 100%;
+            height: 50px;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 1.2em;
+            top: 20px;
+            color: #4b113c;
+        }
+        .forget label input {
+            margin-right: 3px;
+            appearance: none;
+            -webkit-appearance: none; 
+            -moz-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #4b113c;
+            border-radius: 5px;
+            background-color: transparent;
+            outline: none;
+            cursor: pointer;
+        }
+
+
+        .forget label {
+            display: flex;
+            align-items: center;
+        }
+
+        .forget label input {
+            margin-right: 10px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #4b113c;
+            border-radius: 5px;
+            background-color: transparent;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .forget label input:checked {
+            background-color: #4b113c;
+        }
+        .forget label input:checked::before {
+            content: '\2713'; 
+            position: absolute;
+            top: 66%;
+            left: 14%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+            color: #ffffff; 
+        }
+        
+    </style>
+  <script>
+    function validateForm() {
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+
+        if (username === "" || password === "") {
+            alert("Please enter both username and password!");
+            return false;
+        }
+        return true;
+    }
+</script>
+</head>
+<body>
+    <script>
+        function validateForm() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            if (username.toLowerCase() !== "shiru" || password !== "Shiru23") {
+                alert("Wrong username or password.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+<body>
+    <section>
+        <div class="form-box">
+            <div class="form-value">
+                <form onsubmit="return validateForm()" action="Welcome.html">
+                    <h2>Login</h2>
+                    <div class="inputbox"> 
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <input type="text" id="username">
+                        <label for="username">Username</label>
+                    </div>
+                    <div class="inputbox">
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        <input type="password" id="password" required>
+                        <label for="password">Password</label>
+                    </div>
+                    <div class="forget">
+                        <label for="savePassword"><input type="checkbox" id="savePassword">Save Password <a href="#" style="color: #f3bae5;">Forget Account</a></label>
+                    </div>
+                    <button type="submit">
+                        <p style="color: rgb(252, 252, 252);">Log in</p>
+                    </button>
+                    
+                    <div>
+                        <p style="color: #f3bae5;">No Account?<a href="#" style="color: #f3bae5;">   Register!</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+</body>
+</html>

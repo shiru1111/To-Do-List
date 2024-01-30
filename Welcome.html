@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('gidd.gif') no-repeat center / cover;
+            filter: blur(10px);
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        h1 {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            animation: moveUp 1.5s ease-in-out;
+            color: #4b113c;
+            margin-top: 20px;
+            z-index: 1;
+        }
+
+        @keyframes moveUp {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: 80%;
+            margin: 20px auto;
+            overflow-x: auto;
+        }
+
+        form {
+            max-width: 400px;
+            width: 100%;
+            background: rgba(85, 11, 81, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(246, 117, 255, 0.836);
+            position: relative;
+            z-index: 1;
+            margin-right: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ff9fe7;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #3a0531;
+            border-radius: 4px;
+            color: #f3bae5; 
+            background-color: transparent; 
+        }
+
+        button {
+            color: #f3bae5;
+            background-color: transparent;
+            border: 1px solid #410a33;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #3a102f;
+            color: #884a8a;
+        }
+
+        .taskItem button {
+            color: #3a0531; 
+            background-color: transparent;
+            border: 1px solid #410a33;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .taskItem button:hover {
+            background-color: #3a102f;
+            color: #884a8a; 
+        }
+
+        #doneList .taskItem button {
+            color: #3a0531; 
+            background-color: transparent;
+            border: 1px solid #410a33;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #doneList .taskItem button:hover {
+            background-color: #3a102f;
+            color: #884a8a;
+        }
+
+        #doneList .taskItem button.trash:hover {
+            background-color: #3a102f;
+            color: #884a8a; 
+        }
+
+        #taskListContainer,
+        #doneListContainer {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            width: 48%;
+        }
+
+        #taskListTitle,
+        #doneListTitle {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #460134;
+        }
+
+        #taskList,
+        #doneList {
+            overflow-y: auto;
+            background: rgba(90, 2, 102, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 0 20px;
+            color: #5a254d;
+        }
+
+        .taskItem {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+        }
+
+        #doneList .taskItem {
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: rgba(255, 235, 235, 0.8);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Welcome Shiru!</h1>
+    </header>
+
+    <main>
+        <form>
+            <label for="task">Task:</label>
+            <input type="text" id="task" name="task" required oninput="changeFontColor(this)">
+
+            <label for="deadline">Deadline:</label>
+            <input type="date" id="deadline" name="deadline" required oninput="changeFontColor(this)">
+
+            <button type="button" onclick="addTask()">Add Task</button>
+        </form>
+
+        <div id="taskListContainer">
+            <div id="taskListTitle">To Do List</div>
+            <div id="taskList"></div>
+        </div>
+
+        <div id="doneListContainer">
+            <div id="doneListTitle">Done List</div>
+            <div id="doneList"></div>
+        </div>
+
+
+        <button type="button" onclick="clearAllTasks()">Clear All Tasks</button>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            loadTasks();
+            setInterval(updateTaskOrder, 60000);
+        });
+
+
+        window.addEventListener('beforeunload', function () {
+            saveTasks();
+        });
+
+        function addTask() {
+            var task = document.getElementById('task').value;
+            var deadline = document.getElementById('deadline').value;
+
+            if (task && deadline) {
+                var taskList = document.getElementById('taskList');
+                var newTask = document.createElement('div');
+                newTask.className = 'taskItem';
+                newTask.innerHTML = '<div><strong>' + task + '</strong> - Deadline: ' + deadline +
+                    '</div><button onclick="markAsDone(this)">Done</button>';
+                taskList.appendChild(newTask);
+
+                saveTasks();
+                sortTasksByDeadline();
+                updateTaskOrder();
+
+                document.getElementById('task').value = '';
+                document.getElementById('deadline').value = '';
+            } else {
+                alert('Please enter both task and deadline.');
+            }
+        }
+
+        function markAsDone(button) {
+            var taskItem = button.parentElement;
+            var doneList = document.getElementById('doneList');
+
+            button.remove();
+
+            var trashButton = document.createElement('button');
+            trashButton.textContent = 'Trash';
+            trashButton.onclick = function () {
+
+                doneList.removeChild(taskItem);
+                saveTasks();
+            };
+
+            taskItem.appendChild(trashButton);
+            doneList.appendChild(taskItem);
+
+
+            saveTasks();
+            sortTasksByDeadline();
+            updateTaskOrder();
+        }
+
+        function loadTasks() {
+            var savedTasks = localStorage.getItem('tasks');
+            var savedDoneTasks = localStorage.getItem('doneTasks');
+
+            if (savedTasks) {
+                var taskList = document.getElementById('taskList');
+                taskList.innerHTML = savedTasks;
+            }
+
+            if (savedDoneTasks) {
+                var doneList = document.getElementById('doneList');
+                doneList.innerHTML = savedDoneTasks;
+
+                var trashButtons = doneList.querySelectorAll('button');
+                trashButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var taskItem = this.parentElement;
+                        taskItem.remove();
+                        saveTasks();
+                    });
+                });
+            }
+
+            sortTasksByDeadline();
+            updateTaskOrder();
+        }
+
+        function saveTasks() {
+            var taskList = document.getElementById('taskList').innerHTML;
+            var doneList = document.getElementById('doneList').innerHTML;
+
+            localStorage.setItem('tasks', taskList);
+            localStorage.setItem('doneTasks', doneList);
+        }
+
+        function clearAllTasks() {
+            var confirmation = confirm('Are you sure you want to clear all tasks?');
+            if (confirmation) {
+                localStorage.clear();
+
+                document.getElementById('taskList').innerHTML = '';
+                document.getElementById('doneList').innerHTML = '';
+            }
+        }
+
+        function sortTasksByDeadline() {
+            var taskList = document.getElementById('taskList');
+            var tasks = Array.from(taskList.children);
+
+            tasks.sort(function (a, b) {
+                var deadlineA = new Date(a.querySelector('div').textContent.split(' - Deadline: ')[1]);
+                var deadlineB = new Date(b.querySelector('div').textContent.split(' - Deadline: ')[1]);
+
+                return deadlineA - deadlineB;
+            });
+
+            taskList.innerHTML = '';
+            tasks.forEach(function (task) {
+                taskList.appendChild(task);
+            });
+        }
+
+        function updateTaskOrder() {
+            var taskList = document.getElementById('taskList');
+            var tasks = Array.from(taskList.children);
+
+            tasks.forEach(function (task, index) {
+                task.style.order = index + 1;
+            });
+        }
+
+
+        function changeFontColor(element) {
+            element.style.color = '#f3bae5';
+        }
+    </script>
+</body>
+
+</html>
